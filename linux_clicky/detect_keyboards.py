@@ -19,4 +19,4 @@ def detect_keyboards():
 
 
 if __name__ == '__main__':
-  print detect_keyboards()
+  print(detect_keyboards())

@@ -1,4 +1,3 @@
-#!/usr/bin/env python2
 # -*- Mode: Python; coding: utf-8; indent-tabs-mode: nil; tab-width: 2 -*-
 # Author: Fábio André Damas <skkeeper at gmail dot com>
 
@@ -7,6 +6,7 @@ from random import choice
 from third_party.evdev import DeviceGroup
 from linux_clicky.play_sound import PlaySound
 from linux_clicky.detect_keyboards import detect_keyboards
+from linux_clicky.key_to_sound import key_to_sound_dict
 from optparse import OptionParser
 from signal import signal, SIGINT
 from sys import exit
@@ -14,8 +14,8 @@ from sys import exit
 
 # Handle CTRL+C
 def signal_handler(signal, frame):
-    print '\033[1;32mCTRL + C Detected. Exiting ...'
-    print 'Ignore any errors after this message.\033[1;m'
+    print('\033[1;32mCTRL + C Detected. Exiting ...')
+    print('Ignore any errors after this message.\033[1;m')
     exit(0)
 signal(SIGINT, signal_handler)
 
@@ -45,21 +45,28 @@ sounds = sound_tmp
 # Volume: Negative to lower the volume
 volume = str(options.volume)
 
-key_sound_pair = dict()
+# key_sound_pair = dict()
 dev = DeviceGroup(detect_keyboards())
 while 1:
     event = dev.next_event()
     if event is not None:
-        # print repr(event)
+        # print(repr(event))
         if event.type == "EV_KEY" and event.value == 1:
             if event.code.startswith("KEY"):
-                if event.code == "KEY_ENTER":
-                    filename = getcwd() + '/sounds/' + sounds["enter"]
-                elif event.code == "KEY_SPACE":
-                    filename = getcwd() + '/sounds/' + sounds["space"]
-                else:
-                    if event.code not in key_sound_pair:
-                        key_sound_pair[event.code] = choice(sounds["click"])
-                    filename = getcwd() + '/sounds/' +\
-                        key_sound_pair[event.code]
-                PlaySound(filename, volume).start()
+                print(event.code)
+                # if event.code == "KEY_ENTER":
+                #     filename = getcwd() + '/sounds/' + sounds["enter"]
+                # elif event.code == "KEY_SPACE":
+                #     filename = getcwd() + '/sounds/' + sounds["space"]
+                if True:  # else:
+                    if event.code not in key_to_sound_dict:
+                        print(f"event code {event.code} not found in key_to_sound_dict")
+                        # key_sound_pair[event.code] = choice(sounds["click"])
+                    # filename = getcwd() + '/sounds/' +\
+                    #     key_sound_pair[event.code]
+                    else:
+                        filename = key_to_sound_dict[event.code]
+                        if filename is None:
+                            print(f"event code {event.code} was found but has no associated sound")
+                        else:
+                            PlaySound(filename, volume).start()
