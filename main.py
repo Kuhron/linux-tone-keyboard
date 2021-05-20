@@ -52,7 +52,9 @@ while 1:
     if event is not None:
         # print(repr(event))
         if event.type == "EV_KEY" and event.value == 1:
-            if event.code.startswith("KEY"):
+            if type(event.code) is not str:
+                print(f"event.code is {event.code}, not a string, skipping")
+            elif event.code.startswith("KEY"):
                 print(event.code)
                 # if event.code == "KEY_ENTER":
                 #     filename = getcwd() + '/sounds/' + sounds["enter"]

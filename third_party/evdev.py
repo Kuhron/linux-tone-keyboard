@@ -37,12 +37,12 @@ def demo():
     while 1:
         event = dev.next_event()
         if event is not None:
-            print repr(event)
+            print(repr(event))
             if event.type == "EV_KEY" and event.value == 1:
                 if event.code.startswith("KEY"):
-                    print event.scanCode
+                    print(event.scanCode)
                 elif event.code.startswith("BTN"):
-                    print event.code
+                    print(event.code)
 
 class BaseDevice:
     """Base class representing the state of an input device, with axes and buttons.
@@ -83,10 +83,10 @@ class BaseDevice:
 
 # evdev ioctl constants. The horrible mess here
 # is to silence silly FutureWarnings
-EVIOCGNAME_512 = ~int(~0x82004506L & 0xFFFFFFFFL)
-EVIOCGID       = ~int(~0x80084502L & 0xFFFFFFFFL)
-EVIOCGBIT_512  = ~int(~0x81fe4520L & 0xFFFFFFFFL)
-EVIOCGABS_512  = ~int(~0x80144540L & 0xFFFFFFFFL)
+EVIOCGNAME_512 = ~int(~0x82004506 & 0xFFFFFFFF)
+EVIOCGID       = ~int(~0x80084502 & 0xFFFFFFFF)
+EVIOCGBIT_512  = ~int(~0x81fe4520 & 0xFFFFFFFF)
+EVIOCGABS_512  = ~int(~0x80144540 & 0xFFFFFFFF)
 
 
 class Device(BaseDevice):
@@ -118,7 +118,7 @@ class Device(BaseDevice):
         absmap = Event.codeMaps['EV_ABS']
         buffer = "\0" * struct.calcsize("iiiii")
         self.absAxisInfo = {}
-        for name, number in absmap.nameMap.iteritems():
+        for name, number in absmap.nameMap.items():
             values = struct.unpack("iiiii", ioctl(self.fd, EVIOCGABS_512 + number, buffer))
             values = dict(zip(( 'value', 'min', 'max', 'fuzz', 'flat' ),values))
             self.absAxisInfo[name] = values
@@ -145,7 +145,7 @@ class DeviceGroup:
         for fileName in fileNames:
             self.devices.append(Device(fileName))
         for device in self.devices:
-            print repr(device)
+            print(repr(device))
             self.fds.append(device.fd)        
             
     def next_event(self):
@@ -167,7 +167,7 @@ class DeviceGroup:
             try:
                 os.close(fd)
             except:
-                print "Warning - failed to close on or more device file descriptors"
+                print("Warning - failed to close on or more device file descriptors")
                 pass
             
 
@@ -179,7 +179,7 @@ class EnumDict:
     def __init__(self, numberMap):
         self.numberMap = numberMap
         self.nameMap = {}
-        for key, value in numberMap.iteritems():
+        for key, value in numberMap.items():
             self.nameMap[value] = key
 
     def toNumber(self, name):
