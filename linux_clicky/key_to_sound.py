@@ -1,7 +1,25 @@
 import os
+import numpy as np
 sounds_dir = "/home/wesley/WavTones/"
 d = lambda fp: os.path.join(sounds_dir, fp)
-n = lambda x: d(f"{x}.wav")
+n = lambda x: Note(note_number=x, filename=d(f"{x}.wav"))
+
+
+class Note:
+    def __init__(self, note_number, filename):
+        self.note_number = note_number
+        self.filename = filename
+        self.note_number_base_12 = convert_to_base_12(self.note_number)
+
+
+def convert_to_base_12(n, use_note_names=True):
+    if use_note_names:
+        twelves, ones = divmod(n, 12)
+        note_name_char = "CKDHEFXGJARB"[ones]
+        return f"{twelves}{note_name_char}"
+    else:
+        return np.base_repr(n, base=12)
+
 
 key_to_sound_dict = {
     # sorting it based on my own keyboard
@@ -236,7 +254,8 @@ key_to_sound_dict = {
     "KEY_CLOSE": None,
     "KEY_UNKNOWN": None,
 }
-key_to_sound_dict = {k: (n(v) if type(v) is int else v) for k,v in key_to_sound_dict.items()}  # so I can just type the MIDI note number
+pitch_offset = 12
+key_to_sound_dict = {k: (n(v + pitch_offset) if type(v) is int else v) for k,v in key_to_sound_dict.items()}  # so I can just type the MIDI note number
 
 def count_vals(dct):
     counts = {}

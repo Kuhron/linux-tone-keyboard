@@ -53,9 +53,10 @@ while 1:
         # print(repr(event))
         if event.type == "EV_KEY" and event.value == 1:
             if type(event.code) is not str:
-                print(f"event.code is {event.code}, not a string, skipping")
+                # print(f"event.code is {event.code}, not a string, skipping")
+                print("non-str")
             elif event.code.startswith("KEY"):
-                print(event.code)
+                # print(event.code)
                 # if event.code == "KEY_ENTER":
                 #     filename = getcwd() + '/sounds/' + sounds["enter"]
                 # elif event.code == "KEY_SPACE":
@@ -67,8 +68,10 @@ while 1:
                     # filename = getcwd() + '/sounds/' +\
                     #     key_sound_pair[event.code]
                     else:
-                        filename = key_to_sound_dict[event.code]
-                        if filename is None:
-                            print(f"event code {event.code} was found but has no associated sound")
+                        note = key_to_sound_dict[event.code]
+                        if note is None:
+                            # print(f"event code {event.code} was found but has no associated sound")
+                            print("unassociated")
                         else:
-                            PlaySound(filename, volume).start()
+                            print(f"Note {note.note_number}_10 = {note.note_number_base_12}_12")
+                            PlaySound(note.filename, volume).start()
