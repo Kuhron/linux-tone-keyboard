@@ -32,7 +32,7 @@ def get_key_to_sound_dict_raw(sound_scheme_name):
 
 
 def load_sound_scheme(sound_scheme_name):
-    sounds_dir = "/home/wesley/WavTones/"
+    sounds_dir = "WavTones/"
     d = lambda fp: os.path.join(sounds_dir, fp)
     n = lambda x: Note(note_number=x, filename=d(f"{x}.wav"))
 

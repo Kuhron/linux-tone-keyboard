@@ -30,18 +30,19 @@ parser.add_option(
 parser.set_defaults(volume=1)
 (options, args) = parser.parse_args()
 
-# Get a list of sound files
-sounds = listdir(getcwd() + '/sounds')
-sound_tmp = {}
-sound_tmp["click"] = []
-for sound in sounds:
-    if sound == 'enter.wav':
-        sound_tmp["enter"] = sound
-    elif sound == 'space.wav':
-        sound_tmp["space"] = sound
-    else:
-        sound_tmp["click"].append(sound)
-sounds = sound_tmp
+# # Get a list of sound files
+# sounds = listdir(getcwd() + '/sounds')
+# sound_tmp = {}
+# sound_tmp["click"] = []
+# for sound in sounds:
+#     if sound == 'enter.wav':
+#         sound_tmp["enter"] = sound
+#     elif sound == 'space.wav':
+#         sound_tmp["space"] = sound
+#     else:
+#         sound_tmp["click"].append(sound)
+# sounds = sound_tmp
+
 # Volume: Negative to lower the volume
 volume = str(options.volume)
 
