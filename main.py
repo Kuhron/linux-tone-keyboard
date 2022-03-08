@@ -4,9 +4,9 @@
 from os import listdir, getcwd
 from random import choice
 from third_party.evdev import DeviceGroup
-from linux_clicky.play_sound import PlaySound
-from linux_clicky.detect_keyboards import detect_keyboards
-from linux_clicky.key_to_sound import key_to_sound_dict
+from linux_tone_keyboard.play_sound import PlaySound
+from linux_tone_keyboard.detect_keyboards import detect_keyboards
+from linux_tone_keyboard.key_to_sound import load_sound_scheme
 from optparse import OptionParser
 from signal import signal, SIGINT
 from sys import exit
@@ -46,6 +46,7 @@ sounds = sound_tmp
 volume = str(options.volume)
 
 # key_sound_pair = dict()
+key_to_sound_dict = load_sound_scheme("original")
 dev = DeviceGroup(detect_keyboards())
 while 1:
     event = dev.next_event()
