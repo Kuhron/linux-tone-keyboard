@@ -10,7 +10,7 @@ class PlaySound(Thread):
   def __init__(self, filename, volume):
     Thread.__init__(self)
     self.filename = filename
-    self.volume = volume
+    self.volume = str(volume)
 
   def run(self):
     cmd = 'play -v ' + self.volume + ' ' + self.filename

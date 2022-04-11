@@ -4,9 +4,8 @@
 from os import listdir, getcwd
 from random import choice
 from third_party.evdev import DeviceGroup
-from linux_tone_keyboard.play_sound import PlaySound
 from linux_tone_keyboard.detect_keyboards import detect_keyboards
-from linux_tone_keyboard.key_to_sound import load_sound_scheme
+from linux_tone_keyboard.key_to_sound import load_sound_scheme, play_sound_for_key_code
 from optparse import OptionParser
 from signal import signal, SIGINT
 from sys import exit
@@ -47,33 +46,13 @@ parser.set_defaults(volume=1)
 volume = str(options.volume)
 
 # key_sound_pair = dict()
-key_to_sound_dict = load_sound_scheme("original")
+key_to_sound_dict = load_sound_scheme("original_no_functions")
 dev = DeviceGroup(detect_keyboards())
-while 1:
+
+while True:
     event = dev.next_event()
     if event is not None:
         # print(repr(event))
         if event.type == "EV_KEY" and event.value == 1:
-            if type(event.code) is not str:
-                # print(f"event.code is {event.code}, not a string, skipping")
-                print("non-str")
-            elif event.code.startswith("KEY"):
-                # print(event.code)
-                # if event.code == "KEY_ENTER":
-                #     filename = getcwd() + '/sounds/' + sounds["enter"]
-                # elif event.code == "KEY_SPACE":
-                #     filename = getcwd() + '/sounds/' + sounds["space"]
-                if True:  # else:
-                    if event.code not in key_to_sound_dict:
-                        print(f"event code {event.code} not found in key_to_sound_dict")
-                        # key_sound_pair[event.code] = choice(sounds["click"])
-                    # filename = getcwd() + '/sounds/' +\
-                    #     key_sound_pair[event.code]
-                    else:
-                        note = key_to_sound_dict[event.code]
-                        if note is None:
-                            # print(f"event code {event.code} was found but has no associated sound")
-                            print("unassociated")
-                        else:
-                            print(f"Note {note.note_number}_10 = {note.note_number_base_12}_12")
-                            PlaySound(note.filename, volume).start()
+            play_sound_for_key_code(event.code, key_to_sound_dict, volume)
+
