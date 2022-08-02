@@ -34,14 +34,13 @@ def get_key_to_sound_dict_raw(sound_scheme_name):
     return sound_schemes[sound_scheme_name]
 
 
-def load_sound_scheme(sound_scheme_name):
+def load_sound_scheme(sound_scheme_name, pitch_offset=0):
     sounds_dir = "WavTones/"
     d = lambda fp: os.path.join(sounds_dir, fp)
     n = lambda x: Note(note_number=x, filename=d(f"{x}.wav"))
 
     key_to_sound_dict = get_key_to_sound_dict_raw(sound_scheme_name)
 
-    pitch_offset = 12
     key_to_sound_dict = {k: (n(v + pitch_offset) if type(v) is int else v) for k,v in key_to_sound_dict.items()}  # so I can just type the MIDI note number
 
     tone_counts = count_vals(key_to_sound_dict)

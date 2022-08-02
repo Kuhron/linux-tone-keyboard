@@ -45,8 +45,9 @@ parser.set_defaults(volume=1)
 # Volume: Negative to lower the volume
 volume = str(options.volume)
 
-# key_sound_pair = dict()
-key_to_sound_dict = load_sound_scheme("original_no_functions")
+sound_scheme = "original_no_functions"
+pitch_offset = 3
+key_to_sound_dict = load_sound_scheme(sound_scheme, pitch_offset)
 dev = DeviceGroup(detect_keyboards())
 
 while True:
